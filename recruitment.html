@@ -792,7 +792,7 @@
 
                        <button
                          type="button"
-                         class="py-1 sm:py-1.5 px-1.5 sm:px-2 inline-flex items-center gap-x-1 sm:gap-x-2 text-xs sm:text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-50"
+                         class="py-1 sm:py-1.5 px-1.5 sm:px-2 inline-flex items-center gap-x-1 sm:gap-x-2 text-xs sm:text-sm font-medium rounded-lg border border-gray-200 bg-[#007FFF] text-white shadow-2xs hover:bg-[#007FFF]/90 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden "
                        >
                          <span class="hidden sm:inline">Next</span>
                          <svg
@@ -834,85 +834,157 @@
       <div class="pt-0">
       
         <div
-          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 mt-4 sm:mt-8 pl-0"
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 mt-4 sm:mt-5 pl-0"
         >
           <!--Single Job Card-->
-          <div
-            class="bg-white border border-gray-200 rounded-[12px] shadow-xl p-3 sm:p-4"
-          >
+          <div class="bg-white border border-gray-200 rounded-[12px] shadow-xl p-3 sm:p-4">
             <div class="flex items-center justify-between">
               <div class="w-fit p-1.5 sm:p-2 border border-gray-300 rounded-full">
-                <img
-                  src="./assets/CodeAce logo.svg"
-                  alt="Job Opening"
-                  class="w-6 h-6 sm:w-8 sm:h-8 object-cover rounded-lg"
-                />
+                <img src="./assets/CodeAce logo.svg" alt="Job Opening" class="w-6 h-6 sm:w-8 sm:h-8 object-cover rounded-lg" />
               </div>
               <div class="border border-gray-200 rounded-full p-1.5 sm:p-2">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  width="20"
-                  height="20"
-                  class="sm:w-6 sm:h-6"
-                  color="currentColor"
-                  fill="none"
-                >
-                  <path
-                    d="M21 12C21 11.1716 20.3284 10.5 19.5 10.5C18.6716 10.5 18 11.1716 18 12C18 12.8284 18.6716 13.5 19.5 13.5C20.3284 13.5 21 12.8284 21 12Z"
-                    stroke="currentColor"
-                    stroke-width="1.5"
-                  ></path>
-                  <path
-                    d="M13.5 12C13.5 11.1716 12.8284 10.5 12 10.5C11.1716 10.5 10.5 11.1716 10.5 12C10.5 12.8284 11.1716 13.5 12 13.5C12.8284 13.5 13.5 12.8284 13.5 12Z"
-                    stroke="currentColor"
-                    stroke-width="1.5"
-                  ></path>
-                  <path
-                    d="M6 12C6 11.1716 5.32843 10.5 4.5 10.5C3.67157 10.5 3 11.1716 3 12C3 12.8284 3.67157 13.5 4.5 13.5C5.32843 13.5 6 12.8284 6 12Z"
-                    stroke="currentColor"
-                    stroke-width="1.5"
-                  ></path>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" class="sm:w-6 sm:h-6" color="currentColor" fill="none">
+                  <path d="M21 12C21 11.1716 20.3284 10.5 19.5 10.5C18.6716 10.5 18 11.1716 18 12C18 12.8284 18.6716 13.5 19.5 13.5C20.3284 13.5 21 12.8284 21 12Z" stroke="currentColor" stroke-width="1.5"></path>
+                  <path d="M13.5 12C13.5 11.1716 12.8284 10.5 12 10.5C11.1716 10.5 10.5 11.1716 10.5 12C10.5 12.8284 11.1716 13.5 12 13.5C12.8284 13.5 13.5 12.8284 13.5 12Z" stroke="currentColor" stroke-width="1.5"></path>
+                  <path d="M6 12C6 11.1716 5.32843 10.5 4.5 10.5C3.67157 10.5 3 11.1716 3 12C3 12.8284 3.67157 13.5 4.5 13.5C5.32843 13.5 6 12.8284 6 12Z" stroke="currentColor" stroke-width="1.5"></path>
                 </svg>
               </div>
             </div>
-
+        
             <div class="mt-3 sm:mt-4">
-              <h4 class="text-base sm:text-lg md:text-[20px] font-bold text-gray-800">
-                Software Engineer
-              </h4>
+              <h4 class="text-base sm:text-lg md:text-[20px] font-bold text-gray-800">Software Engineer</h4>
               <p class="text-xs sm:text-sm text-gray-400 pt-1 line-clamp-3">
-                Responsible for designing, developing, and maintaining
-                high-quality software applications. Collaborates with
-                cross-functional teams to analyze requirements, write clean
-                code, and deliver scalable Products.
+                Responsible for designing, developing, and maintaining scalable software applications. Collaborates with teams to deliver high-quality products.
               </p>
               <div class="flex items-center flex-wrap gap-1.5 sm:gap-2 mt-3 sm:mt-4">
-                <span
-                  class="text-xs sm:text-sm text-blue-500 font-semibold bg-blue-50 rounded-lg px-1.5 sm:px-2 py-0.5 sm:py-1"
-                  >Full Time</span
-                >
-                <span
-                  class="text-xs sm:text-sm text-blue-500 font-semibold bg-blue-50 rounded-lg px-1.5 sm:px-2 py-0.5 sm:py-1"
-                  >Senior Level</span
-                >
-                <span
-                  class="text-xs sm:text-sm text-blue-500 font-semibold bg-blue-50 rounded-lg px-1.5 sm:px-2 py-0.5 sm:py-1"
-                  >Remote</span
-                >
+                <span class="text-xs sm:text-sm text-blue-500 font-semibold bg-blue-50 rounded-lg px-2 py-1">Full Time</span>
+                <span class="text-xs sm:text-sm text-blue-500 font-semibold bg-blue-50 rounded-lg px-2 py-1">Senior Level</span>
+                <span class="text-xs sm:text-sm text-blue-500 font-semibold bg-blue-50 rounded-lg px-2 py-1">Remote</span>
               </div>
             </div>
-            <div
-              class="mt-6 sm:mt-10 w-[100%] h-[2px] bg-gray-200 flex items-center justify-center mx-auto"
-            ></div>
+        
+            <div class="mt-6 sm:mt-10 w-full h-[2px] bg-gray-200"></div>
+        
             <div class="flex items-center justify-between mt-3 sm:mt-4 gap-2">
-              <div class="flex flex-col gap-0 min-w-0 flex-1">
-                <p class="text-sm sm:text-base text-black font-semibold">0-1 Years</p>
-                <span class="text-xs sm:text-sm text-gray-400 truncate">Calicut,India</span>
+              <div>
+                <p class="text-sm sm:text-base text-black font-semibold">0–1 Years</p>
+                <span class="text-xs sm:text-sm text-gray-400">Calicut, India</span>
               </div>
-              <div class="bg-blue-600 text-white rounded-lg px-3 sm:px-4 py-1.5 sm:py-2 cursor-pointer hover:bg-blue-700 transition-colors">
-                <p class="text-xs sm:text-sm font-semibold whitespace-nowrap">Apply Now</p>
+              <button class="bg-blue-600 text-white rounded-lg px-4 py-2 text-xs sm:text-sm font-semibold hover:bg-blue-700 transition-colors">Apply Now</button>
+            </div>
+          </div>
+        
+          <!-- Job Card 2 -->
+          <div class="bg-white border border-gray-200 rounded-[12px] shadow-xl p-3 sm:p-4">
+            <div class="flex items-center justify-between">
+              <div class="w-fit p-1.5 sm:p-2 border border-gray-300 rounded-full">
+                <img src="./assets/CodeAce logo.svg" alt="Job Opening" class="w-6 h-6 sm:w-8 sm:h-8 object-cover rounded-lg" />
               </div>
+              <div class="border border-gray-200 rounded-full p-1.5 sm:p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" class="sm:w-6 sm:h-6" color="currentColor" fill="none">
+                  <path d="M21 12C21 11.1716 20.3284 10.5 19.5 10.5C18.6716 10.5 18 11.1716 18 12C18 12.8284 18.6716 13.5 19.5 13.5C20.3284 13.5 21 12.8284 21 12Z" stroke="currentColor" stroke-width="1.5"></path>
+                  <path d="M13.5 12C13.5 11.1716 12.8284 10.5 12 10.5C11.1716 10.5 10.5 11.1716 10.5 12C10.5 12.8284 11.1716 13.5 12 13.5C12.8284 13.5 13.5 12.8284 13.5 12Z" stroke="currentColor" stroke-width="1.5"></path>
+                  <path d="M6 12C6 11.1716 5.32843 10.5 4.5 10.5C3.67157 10.5 3 11.1716 3 12C3 12.8284 3.67157 13.5 4.5 13.5C5.32843 13.5 6 12.8284 6 12Z" stroke="currentColor" stroke-width="1.5"></path>
+                </svg>
+              </div>
+            </div>
+        
+            <div class="mt-3 sm:mt-4">
+              <h4 class="text-base sm:text-lg md:text-[20px] font-bold text-gray-800">UI/UX Designer</h4>
+              <p class="text-xs sm:text-sm text-gray-400 pt-1 line-clamp-3">
+                Design user-friendly interfaces and engaging digital experiences that align with brand identity and user needs.
+              </p>
+              <div class="flex items-center flex-wrap gap-1.5 sm:gap-2 mt-3 sm:mt-4">
+                <span class="text-xs sm:text-sm text-blue-500 font-semibold bg-blue-50 rounded-lg px-2 py-1">Part Time</span>
+                <span class="text-xs sm:text-sm text-blue-500 font-semibold bg-blue-50 rounded-lg px-2 py-1">Mid Level</span>
+                <span class="text-xs sm:text-sm text-blue-500 font-semibold bg-blue-50 rounded-lg px-2 py-1">Hybrid</span>
+              </div>
+            </div>
+        
+            <div class="mt-6 sm:mt-10 w-full h-[2px] bg-gray-200"></div>
+        
+            <div class="flex items-center justify-between mt-3 sm:mt-4 gap-2">
+              <div>
+                <p class="text-sm sm:text-base text-black font-semibold">2–4 Years</p>
+                <span class="text-xs sm:text-sm text-gray-400">Bangalore, India</span>
+              </div>
+              <button class="bg-blue-600 text-white rounded-lg px-4 py-2 text-xs sm:text-sm font-semibold hover:bg-blue-700 transition-colors">Apply Now</button>
+            </div>
+          </div>
+        
+          <!-- Job Card 3 -->
+          <div class="bg-white border border-gray-200 rounded-[12px] shadow-xl p-3 sm:p-4">
+            <div class="flex items-center justify-between">
+              <div class="w-fit p-1.5 sm:p-2 border border-gray-300 rounded-full">
+                <img src="./assets/CodeAce logo.svg" alt="Job Opening" class="w-6 h-6 sm:w-8 sm:h-8 object-cover rounded-lg" />
+              </div>
+              <div class="border border-gray-200 rounded-full p-1.5 sm:p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" class="sm:w-6 sm:h-6" color="currentColor" fill="none">
+                  <path d="M21 12C21 11.1716 20.3284 10.5 19.5 10.5C18.6716 10.5 18 11.1716 18 12C18 12.8284 18.6716 13.5 19.5 13.5C20.3284 13.5 21 12.8284 21 12Z" stroke="currentColor" stroke-width="1.5"></path>
+                  <path d="M13.5 12C13.5 11.1716 12.8284 10.5 12 10.5C11.1716 10.5 10.5 11.1716 10.5 12C10.5 12.8284 11.1716 13.5 12 13.5C12.8284 13.5 13.5 12.8284 13.5 12Z" stroke="currentColor" stroke-width="1.5"></path>
+                  <path d="M6 12C6 11.1716 5.32843 10.5 4.5 10.5C3.67157 10.5 3 11.1716 3 12C3 12.8284 3.67157 13.5 4.5 13.5C5.32843 13.5 6 12.8284 6 12Z" stroke="currentColor" stroke-width="1.5"></path>
+                </svg>
+              </div>
+            </div>
+        
+            <div class="mt-3 sm:mt-4">
+              <h4 class="text-base sm:text-lg md:text-[20px] font-bold text-gray-800">Digital Marketing Specialist</h4>
+              <p class="text-xs sm:text-sm text-gray-400 pt-1 line-clamp-3">
+                Plan and execute marketing campaigns, manage social media presence, and analyze engagement metrics to grow online reach.
+              </p>
+              <div class="flex items-center flex-wrap gap-1.5 sm:gap-2 mt-3 sm:mt-4">
+                <span class="text-xs sm:text-sm text-blue-500 font-semibold bg-blue-50 rounded-lg px-2 py-1">Full Time</span>
+                <span class="text-xs sm:text-sm text-blue-500 font-semibold bg-blue-50 rounded-lg px-2 py-1">Mid Level</span>
+                <span class="text-xs sm:text-sm text-blue-500 font-semibold bg-blue-50 rounded-lg px-2 py-1">On-site</span>
+              </div>
+            </div>
+        
+            <div class="mt-6 sm:mt-10 w-full h-[2px] bg-gray-200"></div>
+        
+            <div class="flex items-center justify-between mt-3 sm:mt-4 gap-2">
+              <div>
+                <p class="text-sm sm:text-base text-black font-semibold">1–3 Years</p>
+                <span class="text-xs sm:text-sm text-gray-400">Kochi, India</span>
+              </div>
+              <button class="bg-blue-600 text-white rounded-lg px-4 py-2 text-xs sm:text-sm font-semibold hover:bg-blue-700 transition-colors">Apply Now</button>
+            </div>
+          </div>
+        
+          <!-- Job Card 4 -->
+          <div class="bg-white border border-gray-200 rounded-[12px] shadow-xl p-3 sm:p-4">
+            <div class="flex items-center justify-between">
+              <div class="w-fit p-1.5 sm:p-2 border border-gray-300 rounded-full">
+                <img src="./assets/CodeAce logo.svg" alt="Job Opening" class="w-6 h-6 sm:w-8 sm:h-8 object-cover rounded-lg" />
+              </div>
+              <div class="border border-gray-200 rounded-full p-1.5 sm:p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" class="sm:w-6 sm:h-6" color="currentColor" fill="none">
+                  <path d="M21 12C21 11.1716 20.3284 10.5 19.5 10.5C18.6716 10.5 18 11.1716 18 12C18 12.8284 18.6716 13.5 19.5 13.5C20.3284 13.5 21 12.8284 21 12Z" stroke="currentColor" stroke-width="1.5"></path>
+                  <path d="M13.5 12C13.5 11.1716 12.8284 10.5 12 10.5C11.1716 10.5 10.5 11.1716 10.5 12C10.5 12.8284 11.1716 13.5 12 13.5C12.8284 13.5 13.5 12.8284 13.5 12Z" stroke="currentColor" stroke-width="1.5"></path>
+                  <path d="M6 12C6 11.1716 5.32843 10.5 4.5 10.5C3.67157 10.5 3 11.1716 3 12C3 12.8284 3.67157 13.5 4.5 13.5C5.32843 13.5 6 12.8284 6 12Z" stroke="currentColor" stroke-width="1.5"></path>
+                </svg>
+              </div>
+            </div>
+        
+            <div class="mt-3 sm:mt-4">
+              <h4 class="text-base sm:text-lg md:text-[20px] font-bold text-gray-800">Project Manager</h4>
+              <p class="text-xs sm:text-sm text-gray-400 pt-1 line-clamp-3">
+                Manage project timelines, coordinate teams, and ensure successful delivery of technology projects within deadlines.
+              </p>
+              <div class="flex items-center flex-wrap gap-1.5 sm:gap-2 mt-3 sm:mt-4">
+                <span class="text-xs sm:text-sm text-blue-500 font-semibold bg-blue-50 rounded-lg px-2 py-1">Full Time</span>
+                <span class="text-xs sm:text-sm text-blue-500 font-semibold bg-blue-50 rounded-lg px-2 py-1">Lead Level</span>
+                <span class="text-xs sm:text-sm text-blue-500 font-semibold bg-blue-50 rounded-lg px-2 py-1">Hybrid</span>
+              </div>
+            </div>
+        
+            <div class="mt-6 sm:mt-10 w-full h-[2px] bg-gray-200"></div>
+        
+            <div class="flex items-center justify-between mt-3 sm:mt-4 gap-2">
+              <div>
+                <p class="text-sm sm:text-base text-black font-semibold">5+ Years</p>
+                <span class="text-xs sm:text-sm text-gray-400">Remote, India</span>
+              </div>
+              <button class="bg-blue-600 text-white rounded-lg px-4 py-2 text-xs sm:text-sm font-semibold hover:bg-blue-700 transition-colors">Apply Now</button>
             </div>
           </div>
           
