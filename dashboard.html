@@ -1,0 +1,1952 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HRMS Dashboard</title>
+  
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Onest:wght@100..900&family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+  
+    <!-- ✅ Tailwind via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- ✅ Additional CSS for sidebar collapse functionality -->
+    <style>
+      /* Override all Tailwind width classes for sidebar */
+      #sidebar {
+        width: 260px !important;
+        min-width: 260px !important;
+        max-width: 260px !important;
+        transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1), min-width 0.4s cubic-bezier(0.4, 0, 0.2, 1), max-width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        flex-shrink: 0 !important;
+      }
+      
+      /* Sidebar collapsed styles */
+      #sidebar.sidebar-collapsed {
+        width: 72px !important;
+        min-width: 72px !important;
+        max-width: 72px !important;
+      }
+      
+      /* Text elements with smooth transitions */
+      .menu-text, .sidebar-logo, .sidebar-user-text {
+        transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+        opacity: 1;
+        visibility: visible;
+      }
+      
+      #sidebar.sidebar-collapsed .menu-text {
+        opacity: 0 !important;
+        visibility: hidden !important;
+        display: none !important;
+      }
+      
+      #sidebar.sidebar-collapsed .sidebar-logo {
+        opacity: 0 !important;
+        visibility: hidden !important;
+        display: none !important;
+      }
+      
+      #sidebar.sidebar-collapsed .sidebar-user-text {
+        opacity: 0 !important;
+        visibility: hidden !important;
+        display: none !important;
+      }
+      
+      /* User info section with smooth transition */
+      .sidebar-user-info {
+        transition: justify-content 0.3s ease-in-out, padding 0.3s ease-in-out;
+      }
+      
+      #sidebar.sidebar-collapsed .sidebar-user-info {
+        justify-content: center !important;
+        padding: 1rem 0.5rem !important;
+      }
+      
+      /* Navigation with smooth transitions */
+      .sidebar-nav {
+        transition: padding 0.3s ease-in-out;
+      }
+      
+      #sidebar.sidebar-collapsed .sidebar-nav {
+        padding: 0.5rem !important;
+      }
+      
+      .sidebar-nav a {
+        transition: justify-content 0.3s ease-in-out, padding 0.3s ease-in-out;
+      }
+      
+      #sidebar.sidebar-collapsed .sidebar-nav a {
+        justify-content: center !important;
+        padding: 0.75rem !important;
+      }
+      
+      .sidebar-nav a .space-x-3 {
+        transition: gap 0.3s ease-in-out;
+      }
+      
+      #sidebar.sidebar-collapsed .sidebar-nav a .space-x-3 {
+        gap: 0 !important;
+      }
+      
+      /* Ensure main content doesn't overflow */
+      main {
+        min-width: 0 !important;
+        overflow-x: hidden !important;
+      }
+      
+      body {
+        overflow-x: hidden !important;
+      }
+      
+      /* Responsive: auto-collapse sidebar on tablet and mobile */
+      @media (max-width: 1024px) {
+        #sidebar {
+          width: 72px !important;
+          min-width: 72px !important;
+          max-width: 72px !important;
+        }
+        .menu-text, .sidebar-logo, .sidebar-user-text {
+          opacity: 0 !important;
+          visibility: hidden !important;
+          display: none !important;
+        }
+        .sidebar-user-info {
+          justify-content: center !important;
+          padding: 1rem 0.5rem !important;
+        }
+        .sidebar-nav {
+          padding: 0.5rem !important;
+        }
+        .sidebar-nav a {
+          justify-content: center !important;
+          padding: 0.75rem !important;
+        }
+        .sidebar-nav a .space-x-3 {
+          gap: 0 !important;
+        }
+      }
+    </style>
+  
+    <!-- ✅ Preline JS - Moved to end of body for proper DOM loading -->
+  
+    <!-- ✅ ApexCharts -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  </head>
+  
+
+  <body class="bg-blue-50/50 flex">
+    <!-- Navigation Toggle -->
+    <!-- Navigation Toggle -->
+
+    <!-- End Navigation Toggle -->
+
+    <!-- Sidebar -->
+    <div id="sidebar" class="transition-all duration-300 bg-white border-r flex flex-col justify-between h-[100vh] sticky top-0">
+      <div>
+        <!-- Logo + Collapse Button -->
+        <div class="flex items-center justify-center gap-20 border-b p-4">
+         <img src="./assets/CodeAce logo black.svg" alt="CodeAce" class="sidebar-logo w-[100px] h-[50px] object-cover rounded-lg">
+          <button id="collapseBtn" class="p-2 rounded-full hover:bg-gray-100">
+            <svg id="collapseIcon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+        </div>
+  
+        <!-- Nav Links -->
+        <nav class="sidebar-nav p-2 space-y-5">
+          <a href="./dashboard.html" class="flex items-center space-x-3 p-2 rounded-lg bg-blue-100 text-blue-600 font-medium">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="currentColor" fill="none" class="size-6">
+              <path d="M3 11.9896V14.5C3 17.7998 3 19.4497 4.02513 20.4749C5.05025 21.5 6.70017 21.5 10 21.5H14C17.2998 21.5 18.9497 21.5 19.9749 20.4749C21 19.4497 21 17.7998 21 14.5V11.9896C21 10.3083 21 9.46773 20.6441 8.74005C20.2882 8.01237 19.6247 7.49628 18.2976 6.46411L16.2976 4.90855C14.2331 3.30285 13.2009 2.5 12 2.5C10.7991 2.5 9.76689 3.30285 7.70242 4.90855L5.70241 6.46411C4.37533 7.49628 3.71179 8.01237 3.3559 8.74005C3 9.46773 3 10.3083 3 11.9896Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path d="M15 21.5V16.5C15 15.0858 15 14.3787 14.5607 13.9393C14.1213 13.5 13.4142 13.5 12 13.5C10.5858 13.5 9.87868 13.5 9.43934 13.9393C9 14.3787 9 15.0858 9 16.5V21.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+            <span class="menu-text text-[16px]">Dashboard</span>
+          </a>
+  
+          <a href="./employee.html" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-100">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="currentColor" fill="none" class="size-6">
+              <path d="M15 21.5001C16.3945 21.5001 17.0918 21.5001 17.6672 21.362C19.4955 20.923 20.9229 19.4956 21.3618 17.6673C21.5 17.0919 21.5 16.3946 21.5 15.0001M9 21.5001C7.60547 21.5001 6.90821 21.5001 6.33277 21.362C4.50453 20.923 3.07707 19.4956 2.63815 17.6673C2.5 17.0919 2.5 16.3946 2.5 15.0001M9 2.50012C7.60547 2.50012 6.90821 2.50012 6.33277 2.63827C4.50453 3.0772 3.07707 4.50465 2.63815 6.3329C2.5 6.90833 2.5 7.6056 2.5 9.00012M15 2.50012C16.3945 2.50012 17.0918 2.50012 17.6672 2.63827C19.4955 3.0772 20.9229 4.50465 21.3618 6.3329C21.5 6.90833 21.5 7.6056 21.5 9.00012" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path d="M15 9.5C15 7.84315 13.6569 6.5 12 6.5C10.3431 6.5 9 7.84315 9 9.5C9 11.1569 10.3431 12.5 12 12.5C13.6569 12.5 15 11.1569 15 9.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path d="M17 17.5C17 14.7386 14.7614 12.5 12 12.5C9.23858 12.5 7 14.7386 7 17.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+            <span class="menu-text text-[16px]">Employees</span>
+          </a>
+  
+          <a href="./department.html" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-100">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="currentColor" fill="none" class="size-6 ">
+              <path d="M15.5 11C15.5 9.067 13.933 7.5 12 7.5C10.067 7.5 8.5 9.067 8.5 11C8.5 12.933 10.067 14.5 12 14.5C13.933 14.5 15.5 12.933 15.5 11Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path d="M15.4827 11.3499C15.8047 11.4475 16.1462 11.5 16.5 11.5C18.433 11.5 20 9.933 20 8C20 6.067 18.433 4.5 16.5 4.5C14.6851 4.5 13.1928 5.8814 13.0173 7.65013" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path d="M10.9827 7.65013C10.8072 5.8814 9.31492 4.5 7.5 4.5C5.567 4.5 4 6.067 4 8C4 9.933 5.567 11.5 7.5 11.5C7.85381 11.5 8.19535 11.4475 8.51727 11.3499" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path d="M22 16.5C22 13.7386 19.5376 11.5 16.5 11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path d="M17.5 19.5C17.5 16.7386 15.0376 14.5 12 14.5C8.96243 14.5 6.5 16.7386 6.5 19.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path d="M7.5 11.5C4.46243 11.5 2 13.7386 2 16.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+            <span class="menu-text text-[16px]">Department</span>
+          </a>
+  
+          <a href="./attendance.html" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-100">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="currentColor" fill="none" class="size-6">
+              <path d="M3 4V14C3 16.8284 3 18.2426 3.87868 19.1213C4.75736 20 6.17157 20 9 20H21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path d="M7 16L16 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path d="M7 12L20 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path d="M7 8L13 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+            <span class="menu-text text-[16px]">Attendance</span>
+          </a>
+          <a href ="./recruitment.html" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-100"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="currentColor" fill="none">
+            <path d="M11.0065 21.0001H9.60546C6.02021 21.0001 4.22759 21.0001 3.11379 19.8652C2 18.7302 2 16.9035 2 13.2501C2 9.59674 2 7.77004 3.11379 6.63508C4.22759 5.50012 6.02021 5.50012 9.60546 5.50012H13.4082C16.9934 5.50012 18.7861 5.50012 19.8999 6.63508C20.7568 7.50831 20.9544 8.79102 21 11.0001" stroke="#141B34" stroke-width="1.5" stroke-linecap="round" />
+            <path d="M20.0167 20.0233L21.9998 22M21.0528 17.5265C21.0528 15.5789 19.4739 14 17.5263 14C15.5786 14 13.9998 15.5789 13.9998 17.5265C13.9998 19.4742 15.5786 21.0531 17.5263 21.0531C19.4739 21.0531 21.0528 19.4742 21.0528 17.5265Z" stroke="#141B34" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M15.9998 5.5L15.9004 5.19094C15.4054 3.65089 15.1579 2.88087 14.5686 2.44043C13.9794 2 13.1967 2 11.6313 2H11.3682C9.8028 2 9.02011 2 8.43087 2.44043C7.84162 2.88087 7.59411 3.65089 7.0991 5.19094L6.99976 5.5" stroke="#141B34" stroke-width="1.5" />
+        </svg>
+        <span class="menu-text text-[16px]">Recruitment</span>
+        </a>
+          <a href="./leave.html" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-100">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="currentColor" fill="none" class="size-6">
+              <path d="M14.5 6C14.4534 4.90658 14.3147 4.20985 13.9025 3.67376C13.7426 3.46574 13.5561 3.27954 13.3476 3.11992C12.5381 2.5 11.363 2.5 9.01286 2.5H8.51184C5.67786 2.5 4.26087 2.5 3.38046 3.37867C2.50006 4.25734 2.50004 5.67157 2.50003 8.49997L2.50002 15.5C2.50001 18.3284 2.5 19.7426 3.38042 20.6213C4.26083 21.5 5.67783 21.5 8.51184 21.5H9.01281C11.363 21.5 12.5381 21.5 13.3476 20.8801C13.556 20.7205 13.7426 20.5343 13.9025 20.3263C14.3147 19.7901 14.4534 19.0933 14.5 17.9996" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path d="M20.5 11.9999H8.50002M18 15.5C18 15.5 21.5 12.9223 21.5 12C21.5 11.0777 18 8.5 18 8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+            <span class="menu-text text-[16px]">Leave</span>
+          </a>
+  
+          <a href="./payroll.html" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-100">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="currentColor" fill="none" class="size-6">
+              <path d="M11 21.5H15C17.8284 21.5 19.2426 21.5 20.1213 20.6213C21 19.7426 21 18.3284 21 15.5V14.5C21 11.6716 21 10.2574 20.1213 9.37868C19.2426 8.5 17.8284 8.5 15 8.5H3V13.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path d="M15 8.49833V4.1103C15 3.22096 14.279 2.5 13.3897 2.5C13.1336 2.5 12.8812 2.56108 12.6534 2.67818L3.7623 7.24927C3.29424 7.48991 3 7.97203 3 8.49833" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path d="M17.5 15.5C17.7761 15.5 18 15.2761 18 15C18 14.7239 17.7761 14.5 17.5 14.5M17.5 15.5C17.2239 15.5 17 15.2761 17 15C17 14.7239 17.2239 14.5 17.5 14.5M17.5 15.5V14.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path d="M10 18H6.5M6.5 18H3M6.5 18V14.5M6.5 18V21.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+            <span class="menu-text text-[16px]">Payroll</span>
+          </a>
+        </nav>
+      </div>
+  
+      <!-- User Info -->
+      <div class="sidebar-user-info p-4 border-t flex items-center space-x-3">
+        <img src="https://i.pravatar.cc/30" class="rounded-full w-8 h-8" alt="user" />
+        <span class="sidebar-user-text menu-text text-sm font-medium">Mia Hudson</span>
+      </div>
+    </div>
+
+    <!-- Main content -->
+    <main class="flex-1 p-2 xs:p-2 md:p-4 lg:p-6 xl:p-6 2xl:p-6 ">
+      <div>
+        <!--Header-->
+        <div class="flex items-center justify-center bg-white w-full border border-gray-200 rounded-lg shadow-sm p-4 md:justify-normal ">
+          <h1 class="text-[20px] font-bold text-gray-900 ">Dashboard</h1>
+
+        </div>
+        <!--Statistics Cards-->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4 pt-5">
+          <!-- Card -->
+          <div class="bg-white border border-blue-100 rounded-xl shadow-sm p-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="text-sm font-medium text-gray-500">
+                  Total Employees
+                </h3>
+                <p class="text-2xl font-semibold text-blue-700 mt-1">128</p>
+              </div>
+              <div class="p-3 bg-blue-100 text-blue-600 rounded-full w-12 h-12 flex items-center justify-center">
+                <i class="fa-solid fa-users"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white border border-blue-100 rounded-xl shadow-sm p-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="text-sm font-medium text-gray-500">
+                  Active Employees
+                </h3>
+                <p class="text-2xl font-semibold text-green-600 mt-1">117</p>
+              </div>
+              <div class="p-3 bg-green-100 text-green-600 rounded-full w-12 h-12 flex items-center justify-center">
+                <i class="fa-solid fa-user-check"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white border border-blue-100 rounded-xl shadow-sm p-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="text-sm font-medium text-gray-500">
+                  On Leave Today
+                </h3>
+                <p class="text-2xl font-semibold text-yellow-600 mt-1">11</p>
+              </div>
+              <div class="p-3 bg-yellow-100 text-yellow-600 rounded-full w-12 h-12 flex items-center justify-center">
+                <i class="fa-solid fa-plane-departure"></i>
+              </div>
+            </div>
+          </div>
+          <div class="bg-white border border-blue-100 rounded-xl shadow-sm p-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="text-sm font-medium text-gray-500">Attendance Rate</h3>
+                <p class="text-2xl font-semibold text-green-600 mt-1">94%</p>
+              </div>
+              <div class="p-3 bg-green-100 text-green-600 rounded-full w-12 h-12 flex items-center justify-center">
+                <i class="fa-solid fa-calendar-check"></i>
+              </div>
+            </div>
+          </div>
+          <div class="bg-white border border-blue-100 rounded-xl shadow-sm p-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="text-sm font-medium text-gray-500">
+                  Open Positions
+                </h3>
+                <p class="text-2xl font-semibold text-purple-600 mt-1">6</p>
+              </div>
+              <div class="p-3 bg-purple-100 text-purple-600 rounded-full w-12 h-12 flex items-center justify-center">
+                <i class="fa-solid fa-briefcase"></i>
+              </div>
+            </div>
+          </div>
+         
+          <div class="bg-white border border-blue-100 rounded-xl shadow-sm p-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="text-sm font-medium text-gray-500">
+                  Total Resignation
+                </h3>
+                <p class="text-2xl font-semibold text-red-600 mt-1">10</p>
+              </div>
+              <div class="p-3 bg-red-100 text-red-600 rounded-full w-12 h-12 flex items-center justify-center">
+                <i class="fa-solid fa-user-times"></i>
+              </div>
+            </div>
+          </div>
+          <div class="bg-white border border-blue-100 rounded-xl shadow-sm p-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="text-sm font-medium text-gray-500">New Hires (This Month)</h3>
+                <p class="text-2xl font-semibold text-green-600 mt-1">4</p>
+              </div>
+              <div class="p-3 bg-green-100 text-green-600 rounded-full w-12 h-12 flex items-center justify-center">
+                <i class="fa-solid fa-user-plus"></i>
+              </div>
+            </div>
+          </div>
+          <div class="bg-white border border-blue-100 rounded-xl shadow-sm p-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="text-sm font-medium text-gray-500">Remote Employees</h3>
+                <p class="text-2xl font-semibold text-sky-600 mt-1">28</p>
+              </div>
+              <div class="p-3 bg-sky-100 text-sky-600 rounded-full w-12 h-12 flex items-center justify-center">
+                <i class="fa-solid fa-house-laptop"></i>
+              </div>
+            </div>
+          </div>
+          <div class="bg-white border border-blue-100 rounded-xl shadow-sm p-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="text-sm font-medium text-gray-500">Hybrid Employees</h3>
+                <p class="text-2xl font-semibold text-indigo-600 mt-1">32</p>
+              </div>
+              <div class="p-3 bg-indigo-100 text-indigo-600 rounded-full w-12 h-12 flex items-center justify-center">
+                <i class="fa-solid fa-people-arrows"></i>
+              </div>
+            </div>
+          </div>
+          <div class="bg-white border border-blue-100 rounded-xl shadow-sm p-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="text-sm font-medium text-gray-500">Pending Leave Requests</h3>
+                <p class="text-2xl font-semibold text-orange-600 mt-1">5</p>
+              </div>
+              <div class="p-3 bg-orange-100 text-orange-600 rounded-full w-12 h-12 flex items-center justify-center">
+                <i class="fa-solid fa-envelope-open-text"></i>
+              </div>
+            </div>
+          </div>
+          
+                    
+        </div>
+        <!--Attendance graphs-->
+        <div
+          id="hs-multiple-area-charts-compare-two-tooltip"
+          class="bg-white border border-gray-200 rounded-xl shadow-sm p-4 mt-5 "
+        >
+        <h2 class="text-xl font-semibold text-gray-800">Attendance Summary</h2>
+        </div>
+        <!-- Department Attendance pie Chart and Attendance Section -->
+        <div class="flex flex-wrap mt-2 gap-4 xl:flex-nowrap ">
+          <div class="bg-white border border-gray-200 rounded-xl shadow-sm mt-5 w-full p-4 md:p-2 xl:p-4  lg:w-[100%] xl:w-[30%]" >
+            <h3 class="text-base font-semibold text-black mb-4 pl-4 p-4">
+              Department Employee Count
+            </h3>
+            <div class="w-full p-6">
+              <div class="flex flex-col justify-center items-center">
+                <div id="hs-doughnut-chart"></div>
+
+                <!-- Legend Indicator -->
+                <div
+                  class="flex justify-center items-center flex-wrap gap-x-10 gap-y-4 mt-3 sm:mt-10"
+                >
+                  <div class="inline-flex items-center">
+                    <span
+                      class="size-2.5 inline-block bg-blue-600 rounded-sm me-2"
+                    ></span>
+                    <span
+                      class="text-[13px] text-gray-600 dark:text-neutral-400"
+                    >
+                      IT Department
+                    </span>
+                  </div>
+                  <div class="inline-flex items-center">
+                    <span
+                      class="size-2.5 inline-block bg-cyan-500 rounded-sm me-2"
+                    ></span>
+                    <span
+                      class="text-[13px] text-gray-600 dark:text-neutral-400"
+                    >
+                      HR Department
+                    </span>
+                  </div>
+                  <div class="inline-flex items-center">
+                    <span
+                      class="size-2.5 inline-block bg-gray-300 rounded-sm me-2 dark:bg-neutral-700"
+                    ></span>
+                    <span
+                      class="text-[13px] text-gray-600 dark:text-neutral-400"
+                    >
+                      Finance Department
+                    </span>
+                  </div>
+                </div>
+                <!-- End Legend Indicator -->
+              </div>
+            </div>
+          </div>
+          <div class="w-full bg-white border border-gray-200 rounded-xl shadow-sm p-4 mt-5 min-h-[500px] md:p-2 xl:p-4"  >
+            <div>
+              <!-- Table Section -->
+              <div class="w-full max-w-7xl mx-auto">
+                <!-- Card -->
+                <div class="flex flex-col">
+                  <div
+                    class="overflow-x-auto [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-thumb]:bg-gray-300"
+                  >
+                    <div class="min-w-full inline-block align-middle p-2 xl:p-4">
+                      <div>
+                        <h3 class="text-base font-semibold text-black mb-4 pl-0 md:pl-2 xl:pl-0">
+                          Employee Leave List
+                        </h3>
+                        <!-- Table -->
+                        <table
+                          class="w-full divide-y divide-gray-200 table-fixed"
+                        >
+                          <thead class="bg-gray-50 text-center">
+                            <tr>
+                              <th
+                                scope="col"
+                                class="w-1/4 ps-6 lg:ps-3 xl:ps-0 pe-6 py-3 text-start"
+                              >
+                                <div class="flex items-center gap-x-2">
+                                  <span
+                                    class="text-xs font-semibold uppercase text-gray-800"
+                                  >
+                                    Name
+                                  </span>
+                                </div>
+                              </th>
+
+                              <th
+                                scope="col"
+                                class="w-1/5 px-6 py-3 text-start"
+                              >
+                                <div class="flex items-center gap-x-2">
+                                  <span
+                                    class="text-xs font-semibold uppercase text-gray-800"
+                                  >
+                                    Department
+                                  </span>
+                                </div>
+                              </th>
+
+                              <th
+                                scope="col"
+                                class="w-1/6 px-6 py-3 text-start"
+                              >
+                                <div class="flex items-center gap-x-2">
+                                  <span
+                                    class="text-xs font-semibold uppercase text-gray-800"
+                                  >
+                                    Status
+                                  </span>
+                                </div>
+                              </th>
+
+                              <th
+                                scope="col"
+                                class="w-1/6 px-6 py-3 text-start"
+                              >
+                                <div class="flex items-center gap-x-2">
+                                  <span
+                                    class="text-xs font-semibold uppercase text-gray-800"
+                                  >
+                                    Total Days
+                                  </span>
+                                </div>
+                              </th>
+
+                              <th
+                                scope="col"
+                                class="w-1/6 px-6 py-3 text-start"
+                              >
+                                <div class="flex items-center gap-x-2">
+                                  <span
+                                    class="text-xs font-semibold uppercase text-gray-800"
+                                  >
+                                    Created
+                                  </span>
+                                </div>
+                              </th>
+
+                              <th
+                                scope="col"
+                                class="w-1/12 px-6 py-3 text-end"
+                              ></th>
+                            </tr>
+                          </thead>
+
+                          <tbody class="divide-y divide-gray-200">
+                            <tr>
+                              <td class="whitespace-nowrap">
+                                <div class="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3">
+                                  <div class="flex items-center gap-x-3">
+                                    <img
+                                      class="inline-block size-9.5 rounded-full w-10 h-10"
+                                      src="https://images.unsplash.com/photo-1531927557220-a9e23c1e4794?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80"
+                                      alt="Avatar"
+                                    />
+                                    <div class="grow">
+                                      <span
+                                        class="block text-sm font-semibold text-gray-800"
+                                        >Christina Bersh</span
+                                      >
+                                      <span class="block text-sm text-gray-500"
+                                        >christina@site.com</span
+                                      >
+                                    </div>
+                                  </div>
+                                </div>
+                              </td>
+                              <td class="w-1/5 whitespace-nowrap">
+                                <div class="px-6 py-3">
+                                  <span
+                                    class="block text-sm font-semibold text-gray-800"
+                                    >Director</span
+                                  >
+                                  <span class="block text-sm text-gray-500"
+                                    >Human resources</span
+                                  >
+                                </div>
+                              </td>
+                              <td class="w-1/6 whitespace-nowrap">
+                                <div class="px-6 py-3">
+                                  <span
+                                    class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-teal-100 text-teal-800 rounded-full"
+                                  >
+                                    <svg
+                                      class="size-2.5"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="16"
+                                      height="16"
+                                      fill="currentColor"
+                                      viewBox="0 0 16 16"
+                                    >
+                                      <path
+                                        d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"
+                                      />
+                                    </svg>
+                                    Active
+                                  </span>
+                                </div>
+                              </td>
+                              <td class="w-1/6 whitespace-nowrap">
+                                <div class="px-6 py-3">
+                                  <h3 class="text-sm text-gray-500">2 Days</h3>
+                                </div>
+                              </td>
+                              <td class="w-1/6 whitespace-nowrap">
+                                <div class="px-6 py-3">
+                                  <span class="text-sm text-gray-500"
+                                    >28 Dec, 12:12</span
+                                  >
+                                </div>
+                              </td>
+                              <td class="w-1/12 whitespace-nowrap">
+                                <div class="px-6 py-1.5">
+                                  <a
+                                    class="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-hidden focus:underline font-medium"
+                                    href="#"
+                                  >
+                                    Edit
+                                  </a>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td class="w-1/4 whitespace-nowrap">
+                                <div class="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3">
+                                  <div class="flex items-center gap-x-3">
+                                    <img
+                                      class="inline-block size-9.5 rounded-full w-10 h-10"
+                                      src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80"
+                                      alt="Avatar"
+                                    />
+                                    <div class="grow">
+                                      <span
+                                        class="block text-sm font-semibold text-gray-800"
+                                        >John Smith</span
+                                      >
+                                      <span class="block text-sm text-gray-500"
+                                        >john.smith@site.com</span
+                                      >
+                                    </div>
+                                  </div>
+                                </div>
+                              </td>
+                              <td class="w-1/5 whitespace-nowrap">
+                                <div class="px-6 py-3">
+                                  <span
+                                    class="block text-sm font-semibold text-gray-800"
+                                    >Manager</span
+                                  >
+                                  <span class="block text-sm text-gray-500"
+                                    >Marketing</span
+                                  >
+                                </div>
+                              </td>
+                              <td class="w-1/6 whitespace-nowrap">
+                                <div class="px-6 py-3">
+                                  <span
+                                    class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-green-100 text-green-800 rounded-full"
+                                  >
+                                    <svg
+                                      class="size-2.5"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="16"
+                                      height="16"
+                                      fill="currentColor"
+                                      viewBox="0 0 16 16"
+                                    >
+                                      <path
+                                        d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"
+                                      />
+                                    </svg>
+                                    Active
+                                  </span>
+                                </div>
+                              </td>
+                              <td class="w-1/6 whitespace-nowrap">
+                                <h3 class="text-sm text-gray-500 px-6">
+                                  2 Days
+                                </h3>
+                              </td>
+                              <td class="w-1/6 whitespace-nowrap">
+                                <div class="px-6 py-3">
+                                  <span class="text-sm text-gray-500"
+                                    >15 Jan, 09:30</span
+                                  >
+                                </div>
+                              </td>
+                              <td class="w-1/12 whitespace-nowrap">
+                                <div class="px-6 py-1.5">
+                                  <a
+                                    class="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-hidden focus:underline font-medium"
+                                    href="#"
+                                  >
+                                    Edit
+                                  </a>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td class="w-1/4 whitespace-nowrap">
+                                <div class="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3">
+                                  <div class="flex items-center gap-x-3">
+                                    <img
+                                      class="inline-block size-9.5 rounded-full w-10 h-10"
+                                      src="https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80"
+                                      alt="Avatar"
+                                    />
+                                    <div class="grow">
+                                      <span
+                                        class="block text-sm font-semibold text-gray-800"
+                                        >Sarah Johnson</span
+                                      >
+                                      <span class="block text-sm text-gray-500"
+                                        >sarah.johnson@site.com</span
+                                      >
+                                    </div>
+                                  </div>
+                                </div>
+                              </td>
+                              <td class="w-1/5 whitespace-nowrap">
+                                <div class="px-6 py-3">
+                                  <span
+                                    class="block text-sm font-semibold text-gray-800"
+                                    >Developer</span
+                                  >
+                                  <span class="block text-sm text-gray-500"
+                                    >Engineering</span
+                                  >
+                                </div>
+                              </td>
+                              <td class="w-1/6 whitespace-nowrap">
+                                <div class="px-6 py-3">
+                                  <span
+                                    class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-yellow-100 text-yellow-800 rounded-full"
+                                  >
+                                    <svg
+                                      class="size-2.5"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="16"
+                                      height="16"
+                                      fill="currentColor"
+                                      viewBox="0 0 16 16"
+                                    >
+                                      <path
+                                        d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"
+                                      />
+                                    </svg>
+                                    Pending
+                                  </span>
+                                </div>
+                              </td>
+                              <td class="w-1/6 whitespace-nowrap">
+                                <div class="px-6 py-3">
+                                  <h3 class="text-sm text-gray-500">2 Days</h3>
+                                </div>
+                              </td>
+                              <td class="w-1/6 whitespace-nowrap">
+                                <div class="px-6 py-3">
+                                  <span class="text-sm text-gray-500"
+                                    >20 Jan, 14:45</span
+                                  >
+                                </div>
+                              </td>
+                              <td class="w-1/12 whitespace-nowrap">
+                                <div class="px-6 py-1.5">
+                                  <a
+                                    class="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-hidden focus:underline font-medium"
+                                    href="#"
+                                  >
+                                    Edit
+                                  </a>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td class="w-1/4 whitespace-nowrap">
+                                <div class="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3">
+                                  <div class="flex items-center gap-x-3">
+                                    <img
+                                      class="inline-block size-9.5 rounded-full w-10 h-10"
+                                      src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80"
+                                      alt="Avatar"
+                                    />
+                                    <div class="grow">
+                                      <span
+                                        class="block text-sm font-semibold text-gray-800"
+                                        >Michael Brown</span
+                                      >
+                                      <span class="block text-sm text-gray-500"
+                                        >michael.brown@site.com</span
+                                      >
+                                    </div>
+                                  </div>
+                                </div>
+                              </td>
+                              <td class="w-1/5 whitespace-nowrap">
+                                <div class="px-6 py-3">
+                                  <span
+                                    class="block text-sm font-semibold text-gray-800"
+                                    >Analyst</span
+                                  >
+                                  <span class="block text-sm text-gray-500"
+                                    >Finance</span
+                                  >
+                                </div>
+                              </td>
+                              <td class="w-1/6 whitespace-nowrap">
+                                <div class="px-6 py-3">
+                                  <span
+                                    class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-teal-100 text-teal-800 rounded-full"
+                                  >
+                                    <svg
+                                      class="size-2.5"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="16"
+                                      height="16"
+                                      fill="currentColor"
+                                      viewBox="0 0 16 16"
+                                    >
+                                      <path
+                                        d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"
+                                      />
+                                    </svg>
+                                    Active
+                                  </span>
+                                </div>
+                              </td>
+                              <td class="w-1/6 whitespace-nowrap">
+                                <div class="px-6 py-3">
+                                  <h3 class="text-sm text-gray-500">2 Days</h3>
+                                </div>
+                              </td>
+                              <td class="w-1/6 whitespace-nowrap">
+                                <div class="px-6 py-3">
+                                  <span class="text-sm text-gray-500"
+                                    >10 Jan, 11:20</span
+                                  >
+                                </div>
+                              </td>
+                              <td class="w-1/12 whitespace-nowrap">
+                                <div class="px-6 py-1.5">
+                                  <a
+                                    class="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-hidden focus:underline font-medium"
+                                    href="#"
+                                  >
+                                    Edit
+                                  </a>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td class="whitespace-nowrap">
+                                <div class="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3">
+                                  <div class="flex items-center gap-x-3">
+                                    <img
+                                      class="inline-block size-9.5 rounded-full w-10 h-10"
+                                      src="https://images.unsplash.com/photo-1531927557220-a9e23c1e4794?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80"
+                                      alt="Avatar"
+                                    />
+                                    <div class="grow">
+                                      <span
+                                        class="block text-sm font-semibold text-gray-800"
+                                        >Christina Bersh</span
+                                      >
+                                      <span class="block text-sm text-gray-500"
+                                        >christina@site.com</span
+                                      >
+                                    </div>
+                                  </div>
+                                </div>
+                              </td>
+                              <td class="w-1/5 whitespace-nowrap">
+                                <div class="px-6 py-3">
+                                  <span
+                                    class="block text-sm font-semibold text-gray-800"
+                                    >Director</span
+                                  >
+                                  <span class="block text-sm text-gray-500"
+                                    >Human resources</span
+                                  >
+                                </div>
+                              </td>
+                              <td class="w-1/6 whitespace-nowrap">
+                                <div class="px-6 py-3">
+                                  <span
+                                    class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-teal-100 text-teal-800 rounded-full"
+                                  >
+                                    <svg
+                                      class="size-2.5"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="16"
+                                      height="16"
+                                      fill="currentColor"
+                                      viewBox="0 0 16 16"
+                                    >
+                                      <path
+                                        d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"
+                                      />
+                                    </svg>
+                                    Active
+                                  </span>
+                                </div>
+                              </td>
+                              <td class="w-1/6 whitespace-nowrap">
+                                <div class="px-6 py-3">
+                                  <h3 class="text-sm text-gray-500">2 Days</h3>
+                                </div>
+                              </td>
+                              <td class="w-1/6 whitespace-nowrap">
+                                <div class="px-6 py-3">
+                                  <span class="text-sm text-gray-500"
+                                    >28 Dec, 12:12</span
+                                  >
+                                </div>
+                              </td>
+                              <td class="w-1/12 whitespace-nowrap">
+                                <div class="px-6 py-1.5">
+                                  <a
+                                    class="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-hidden focus:underline font-medium"
+                                    href="#"
+                                  >
+                                    Edit
+                                  </a>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <!-- End Table -->
+
+                        <!-- Footer -->
+                        <div
+                          class=" py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-gray-200"
+                        >
+                          <div>
+                            <p class="text-sm text-gray-600 ">
+                              <span class="font-semibold text-gray-800">6</span>
+                              results
+                            </p>
+                          </div>
+
+                          <div>
+                            <div class="inline-flex gap-x-2">
+                              <button
+                                type="button"
+                                class="py-1.5 px-2 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-50"
+                              >
+                                <svg
+                                  class="shrink-0 size-4"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                >
+                                  <path d="m15 18-6-6 6-6" />
+                                </svg>
+                                Prev
+                              </button>
+
+                              <button
+                                type="button"
+                                class="py-1.5 px-2 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-[#007FFF] text-white shadow-2xs hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-50"
+                              >
+                                Next
+                                <svg
+                                  class="shrink-0 size-4"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                >
+                                  <path d="m9 18 6-6-6-6" />
+                                </svg>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- End Footer -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- End Card -->
+              </div>
+              <!-- End Table Section -->
+            </div>
+          </div>
+        </div>
+        <!--Recruitment Related Section -->
+        <div class="flex flex-wrap mt-8 gap-4 2xl:flex-nowrap" >
+          <div class="  w-[100%] flex flex-wrap gap-4 2xl:w-[100%] xl:flex-nowrap ">
+            <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-2 w-[100%] xl:w-[32%] xl:p-4 ">
+              <div class="p-4 w-full ">
+                <span class="text-[16px] font-semibold text-black mb-4 pl-0 ">Total Hiring this Month</span>
+                <div id="chart" class="w-full  flex justify-center items-center h-full pt-5 "></div>
+              </div>
+              
+            </div>
+            <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-2 w-[100%] xl:w-[68%] xl:p-4 " >
+              <div class="w-full  ">
+                <div>
+                  <!-- Table Section -->
+                  <div class="w-full max-w-7xl mx-auto overflow-x-auto">
+                    <!-- Card -->
+                    <div class="flex flex-col">
+                      <div
+                        class="overflow-x-auto [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-thumb]:bg-gray-300"
+                      >
+                        <div class="min-w-full inline-block align-middle p-4">
+                          <div>
+                            <h3 class="text-base font-semibold text-black mb-4 pl-0">
+                              Interview Schedule
+                            </h3>
+                            <!-- Table -->
+                            <table
+                              class="w-full divide-y divide-gray-200 table-fixed"
+                            >
+                              <thead class="bg-gray-50 text-start">
+                                <tr>
+                                  <th
+                                    scope="col"
+                                    class="w-1/6 ps-6 lg:ps-3 xl:ps-0 pe-6 py-3 text-start"
+                                  >
+                                    <div class="flex items-center ">
+                                      <span
+                                        class="text-xs font-semibold uppercase text-gray-800"
+                                      >
+                                        Candidate
+                                      </span>
+                                    </div>
+                                  </th>
+  
+                                  <th
+                                    scope="col"
+                                    class="w-1/5 px-6 py-3 text-start"
+                                  >
+                                    <div class="flex items-center gap-x-2">
+                                      <span
+                                        class="text-xs font-semibold uppercase text-gray-800"
+                                      >
+                                        Position
+                                      </span>
+                                    </div>
+                                  </th>
+  
+                                  <th
+                                    scope="col"
+                                    class="w-1/6 px-6 py-3 text-start"
+                                  >
+                                    <div class="flex items-center gap-x-2">
+                                      <span
+                                        class="text-xs font-semibold uppercase text-gray-800"
+                                      >
+                                        Time
+                                      </span>
+                                    </div>
+                                  </th>
+  
+                                  <th
+                                    scope="col"
+                                    class="w-1/6 px-6 py-3 text-start"
+                                  >
+                                    <div class="flex items-center gap-x-2">
+                                      <span
+                                        class="text-xs font-semibold uppercase text-gray-800"
+                                      >
+                                        Status
+                                      </span>
+                                    </div>
+                                  </th>
+                                </tr>
+                              </thead>
+  
+                              <tbody class="divide-y divide-gray-200">
+                                <tr>
+                                  <td class="whitespace-nowrap w-1/4">
+                                    <div class="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3">
+                                      <div class="flex items-center">
+                                        
+                                        <div class="grow">
+                                          <span
+                                            class="block text-sm font-semibold text-gray-800"
+                                            >Christina Bersh</span
+                                          >
+                                          <span
+                                            class="block text-sm text-gray-500"
+                                            >christina@site.com</span
+                                          >
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td class="w-1/5 whitespace-nowrap">
+                                    <div class="px-6 py-3">
+                                      
+                                      <span class="block text-sm text-gray-500"
+                                        >Human resources</span
+                                      >
+                                    </div>
+                                  </td>
+                                  <td class="w-1/6 whitespace-nowrap">
+                                    <h3 class="text-sm text-gray-500 pl-3">
+                                      28 Dec, 12:12
+                                    </h3>
+                                  </td>
+                                  <td class="w-1/6 whitespace-nowrap">
+                                    <div class="px-6 py-3">
+                                      <span
+                                        class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-yellow-100 text-yellow-800 rounded-full"
+                                      >
+                                      <svg
+                                      class="size-2.5"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="16"
+                                      height="16"
+                                      fill="currentColor"
+                                      viewBox="0 0 16 16"
+                                    >
+                                      <path
+                                        d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"
+                                      />
+                                        </svg>
+                                        Pending
+                                      </span>
+                                    </div>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                            <!-- End Table -->
+  
+                            <!-- Footer -->
+                           
+                            <!-- End Footer -->
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- End Card -->
+                  </div>
+                  <!-- End Table Section -->
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-2 w-[100%]  2xl:w-[40%] xl:p-4">
+            <div class="flex flex-col">
+              <div class="-m-1.5 overflow-x-auto p-4">
+                <h3 class="text-base font-semibold text-black mb-4 pl-0">Training Programs</h3>
+                <div class=" min-w-full inline-block align-middle">
+                  <div >
+                    <table class="min-w-full divide-y divide-gray-200">
+                      <thead class="bg-gray-50">
+                        <tr>
+                          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Program</th>
+                          <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase ">Date</th>
+                          <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase ">Participants</th>
+                        </tr>
+                      </thead>
+                      <tbody class="divide-y divide-gray-200">
+                        <tr>
+                          <td class="px-6 py-4 whitespace-nowrap text-left text-sm font-medium text-gray-800">AI in Finance</td>
+                          <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-800">28 Dec 2025</td>
+                          <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-800 ">10</td>
+                        </tr>
+                        <tr>
+                          <td class="px-6 py-4 whitespace-nowrap text-left text-sm font-medium text-gray-800">AI in Finance</td>
+                          <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-800">28 Dec 2025</td>
+                          <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-800 ">10</td>
+                        </tr>
+                        <tr>
+                          <td class="px-6 py-4 whitespace-nowrap text-left text-sm font-medium text-gray-800">AI in Finance</td>
+                          <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-800">28 Dec 2025</td>
+                          <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-800 ">15</td>
+                        </tr>
+                        <tr>
+                          <td class="px-6 py-4 whitespace-nowrap text-left text-sm font-medium text-gray-800">AI in Finance</td>
+                          <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-800">28 Dec 2025</td>
+                          <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-800 ">30</td>
+                        </tr>
+            
+                        
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--Late Comers Related Section and  -->
+        <div class="mt-8 flex flex-wrap gap-4 2xl:flex-nowrap">
+          <div class="bg-white border border-gray-200  rounded-xl shadow-sm p-2 w-[100%] 2xl:w-[60%] xl:p-4" >
+            <div class="w-full min-h-[500px]">
+              <div>
+                <!-- Table Section -->
+                <div class="w-full max-w-7xl mx-auto">
+                  <!-- Card -->
+                  <div class="flex flex-col">
+                    <div
+                      class="overflow-x-auto [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-thumb]:bg-gray-300"
+                    >
+                      <div class="min-w-full inline-block align-middle p-4">
+                        <div>
+                          <h3 class="text-base font-semibold text-black mb-4 pl-0">
+                            Monthly Late Comers
+                          </h3>
+                          <!-- Table -->
+                          <table
+                            class="w-full divide-y divide-gray-200 table-fixed"
+                          >
+                            <thead class="bg-gray-50 text-center">
+                              <tr>
+                                <th
+                                  scope="col"
+                                  class="w-1/4 ps-6 lg:ps-3 xl:ps-0 pe-6 py-3 text-start"
+                                >
+                                  <div class="flex items-center gap-x-2">
+                                    <span
+                                      class="text-xs font-semibold uppercase text-gray-800"
+                                    >
+                                      Employee
+                                    </span>
+                                  </div>
+                                </th>
+
+                                <th
+                                  scope="col"
+                                  class="w-1/5 px-6 py-3 text-start"
+                                >
+                                  <div class="flex items-center gap-x-2">
+                                    <span
+                                      class="text-xs font-semibold uppercase text-gray-800"
+                                    >
+                                      Date
+                                    </span>
+                                  </div>
+                                </th>
+
+                                <th
+                                  scope="col"
+                                  class="w-1/6 px-6 py-3 text-start"
+                                >
+                                  <div class="flex items-center gap-x-2">
+                                    <span
+                                      class="text-xs font-semibold uppercase text-gray-800"
+                                    >
+                                      Check-In
+                                    </span>
+                                  </div>
+                                </th>
+
+                                <th
+                                  scope="col"
+                                  class="w-1/6 px-6 py-3 text-start"
+                                >
+                                  <div class="flex items-center gap-x-2">
+                                    <span
+                                      class="text-xs font-semibold uppercase text-gray-800"
+                                    >
+                                      Status
+                                    </span>
+                                  </div>
+                                </th>
+                              </tr>
+                            </thead>
+
+                            <tbody class="divide-y divide-gray-200">
+                              <tr>
+                                <td class="whitespace-nowrap">
+                                  <div class="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3">
+                                    <div class="flex items-center gap-x-3">
+                                      <img
+                                        class="inline-block size-9.5 rounded-full w-10 h-10"
+                                        src="https://images.unsplash.com/photo-1531927557220-a9e23c1e4794?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80"
+                                        alt="Avatar"
+                                      />
+                                      <div class="grow">
+                                        <span
+                                          class="block text-sm font-semibold text-gray-800"
+                                          >Christina Bersh</span
+                                        >
+                                        <span
+                                          class="block text-sm text-gray-500"
+                                          >christina@site.com</span
+                                        >
+                                      </div>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td class="w-1/5 whitespace-nowrap">
+                                  <div class="px-6 py-3">
+                                    <span
+                                      class="block text-sm font-semibold text-gray-800"
+                                      >Director</span
+                                    >
+                                    <span class="block text-sm text-gray-500"
+                                      >Human resources</span
+                                    >
+                                  </div>
+                                </td>
+                                <td class="w-1/6 whitespace-nowrap">
+                                  <h3 class="text-sm text-gray-500 pl-3">
+                                    28 Dec, 12:12
+                                  </h3>
+                                </td>
+                                <td class="w-1/6 whitespace-nowrap">
+                                  <div class="px-6 py-3">
+                                    <span
+                                      class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-yellow-100 text-yellow-800 rounded-full"
+                                    >
+                                    <svg
+                                    class="size-2.5"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="16"
+                                    height="16"
+                                    fill="currentColor"
+                                    viewBox="0 0 16 16"
+                                  >
+                                    <path
+                                      d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"
+                                    />
+                                      </svg>
+                                      Late
+                                    </span>
+                                  </div>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                          <!-- End Table -->
+
+                          <!-- Footer -->
+                          <div
+                            class=" py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-gray-200"
+                          >
+                            <div>
+                              <p class="text-sm text-gray-600">
+                                <span class="font-semibold text-gray-800"
+                                  >6</span
+                                >
+                                results
+                              </p>
+                            </div>
+
+                            <div>
+                              <div class="inline-flex gap-x-2">
+                                <button
+                                  type="button"
+                                  class="py-1.5 px-2 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-50"
+                                >
+                                  <svg
+                                    class="shrink-0 size-4"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                  >
+                                    <path d="m15 18-6-6 6-6" />
+                                  </svg>
+                                  Prev
+                                </button>
+
+                                <button
+                                  type="button"
+                                  class="py-1.5 px-2 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-[#007FFF] text-white shadow-2xs hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-50"
+                                >
+                                  Next
+                                  <svg
+                                    class="shrink-0 size-4"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                  >
+                                    <path d="m9 18 6-6-6-6" />
+                                  </svg>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                          <!-- End Footer -->
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- End Card -->
+                </div>
+                <!-- End Table Section -->
+              </div>
+            </div>
+          </div>
+          <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-2 w-[100%] 2xl:w-[40%] xl:p-4">
+            <div class="w-full min-h-[500px]">
+              <div>
+                <!-- Table Section -->
+                <div class="w-full max-w-7xl mx-auto">
+                  <!-- Card -->
+                  <div class="flex flex-col">
+                    <div
+                      class="overflow-x-auto [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-thumb]:bg-gray-300"
+                    >
+                      <div class="min-w-full inline-block align-middle p-4">
+                        <div>
+                          <h3 class="text-base font-semibold text-black mb-4 pl-0">
+                           Top Late Comers This Month
+                          </h3>
+                          <!-- Table -->
+                          <table
+                            class="w-full divide-y divide-gray-200 table-fixed"
+                          >
+                            <thead class="bg-gray-50 text-center">
+                              <tr>
+                                <th
+                                  scope="col"
+                                  class="w-1/4 ps-6 lg:ps-3 xl:ps-0 pe-6 py-3 text-start"
+                                >
+                                  <div class="flex items-center gap-x-2">
+                                    <span
+                                      class="text-xs font-semibold uppercase text-gray-800"
+                                    >
+                                      Employee
+                                    </span>
+                                  </div>
+                                </th>
+
+                                <th
+                                  scope="col"
+                                  class="w-1/5 px-6 py-3 text-start"
+                                >
+                                  <div class="flex items-center gap-x-2">
+                                    <span
+                                      class="text-xs font-semibold uppercase text-gray-800"
+                                    >
+                                      Department
+                                    </span>
+                                  </div>
+                                </th>
+
+                                <th
+                                  scope="col"
+                                  class="w-1/6 px-6 py-3 text-center"
+                                >
+                                  <div class="flex items-center gap-x-2">
+                                    <span
+                                      class="text-xs font-semibold uppercase text-gray-800"
+                                    >
+                                      Total Late Days
+                                    </span>
+                                  </div>
+                                </th>
+
+                               
+                              </tr>
+                            </thead>
+
+                            <tbody class="divide-y divide-gray-200">
+                              <tr>
+                                <td class="whitespace-nowrap">
+                                  <div class="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3">
+                                    <div class="flex items-center gap-x-3">
+                                      <img
+                                        class="inline-block size-9.5 rounded-full w-10 h-10"
+                                        src="https://images.unsplash.com/photo-1531927557220-a9e23c1e4794?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80"
+                                        alt="Avatar"
+                                      />
+                                      <div class="grow">
+                                        <span
+                                          class="block text-sm font-semibold text-gray-800"
+                                          >Christina Bersh</span
+                                        >
+                                        <span
+                                          class="block text-sm text-gray-500"
+                                          >christina@site.com</span
+                                        >
+                                      </div>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td class="w-1/5 whitespace-nowrap">
+                                  <div class="px-6 py-3">
+                                    <span
+                                      class="block text-sm font-semibold text-gray-800"
+                                      >Director</span
+                                    >
+                                    <span class="block text-sm text-gray-500"
+                                      >Human resources</span
+                                    >
+                                  </div>
+                                </td>
+                                <td class="w-1/6 whitespace-nowrap text-center">
+                                  <h3 class="text-sm text-gray-500 pl-3">
+                                    3 Days
+                                  </h3>
+                                </td>
+                               
+                              </tr>
+                            </tbody>
+                          </table>
+                          <!-- End Table -->
+
+                          <!-- Footer -->
+                          <div
+                            class="py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-gray-200"
+                          >
+                            <div>
+                              <p class="text-sm text-gray-600">
+                                <span class="font-semibold text-gray-800"
+                                  >6</span
+                                >
+                                results
+                              </p>
+                            </div>
+
+                            <div>
+                              <div class="inline-flex gap-x-2">
+                                <button
+                                  type="button"
+                                  class="py-1.5 px-2 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-50"
+                                >
+                                  <svg
+                                    class="shrink-0 size-4"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                  >
+                                    <path d="m15 18-6-6 6-6" />
+                                  </svg>
+                                  Prev
+                                </button>
+
+                                <button
+                                  type="button"
+                                  class="py-1.5 px-2 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-[#007FFF] text-white shadow-2xs hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-50"
+                                >
+                                  Next
+                                  <svg
+                                    class="shrink-0 size-4"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                  >
+                                    <path d="m9 18 6-6-6-6" />
+                                  </svg>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                          <!-- End Footer -->
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- End Card -->
+                </div>
+                <!-- End Table Section -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+    <!--Collapse Sidebar Script-->
+    <script>
+      const collapseBtn = document.getElementById("collapseBtn");
+      const sidebar = document.getElementById("sidebar");
+      const collapseIcon = document.getElementById("collapseIcon");
+  
+      collapseBtn.addEventListener("click", () => {
+        // Toggle the collapsed class - CSS will handle the transitions
+        sidebar.classList.toggle("sidebar-collapsed");
+        collapseIcon.classList.toggle("rotate-180");
+        
+        // Debug logging
+        console.log("Sidebar classes:", sidebar.className);
+        console.log("Sidebar width:", window.getComputedStyle(sidebar).width);
+        console.log("Is collapsed:", sidebar.classList.contains("sidebar-collapsed"));
+      });
+    </script>
+    <!-- Attendance chart Scripts -->
+    <script>
+      window.addEventListener("load", () => {
+        // Chart configuration
+        const chartOptions = {
+          chart: {
+            height: 400,
+            type: "area",
+            toolbar: {
+              show: false,
+            },
+            zoom: {
+              enabled: true,
+            },
+          },
+          series: [
+            {
+              name: "Present",
+              data: [95, 97, 94, 92, 96, 98, 97, 95, 94, 96, 97, 98],
+            },
+            {
+              name: "Absent",
+              data: [92, 94, 91, 89, 93, 95, 94, 92, 91, 93, 94, 95],
+            },
+          ],
+
+          legend: {
+            show: true,
+            position: "top",
+            horizontalAlign: "right",
+          },
+          dataLabels: {
+            enabled: false,
+          },
+          stroke: {
+            curve: "straight",
+            width: 2,
+          },
+          grid: {
+            strokeDashArray: 2,
+            borderColor: "#e5e7eb",
+          },
+          fill: {
+            type: "gradient",
+            gradient: {
+              type: "vertical",
+              shadeIntensity: 1,
+              opacityFrom: 0.1,
+              opacityTo: 0.8,
+              stops: [0, 100],
+            },
+          },
+          colors: ["#2563eb", "#9333ea"],
+          xaxis: {
+            type: "category",
+            categories: [
+              "Jan",
+              "Feb",
+              "Mar",
+              "Apr",
+              "May",
+              "Jun",
+              "Jul",
+              "Aug",
+              "Sep",
+              "Oct",
+              "Nov",
+              "Dec",
+            ],
+            axisBorder: {
+              show: false,
+            },
+            axisTicks: {
+              show: false,
+            },
+            labels: {
+              style: {
+                fontSize: "13px",
+                fontFamily: "Inter, ui-sans-serif",
+                fontWeight: 400,
+                colors: "#9ca3af",
+              },
+            },
+          },
+          yaxis: {
+            min: 80,
+            max: 100,
+            labels: {
+              align: "left",
+              minWidth: 0,
+              maxWidth: 140,
+              style: {
+                fontSize: "13px",
+                fontFamily: "Inter, ui-sans-serif",
+                fontWeight: 400,
+                colors: "#9ca3af",
+              },
+              formatter: (value) => `${value}%`,
+            },
+          },
+          tooltip: {
+            shared: true,
+            intersect: false,
+            x: {
+              format: "MMM yyyy",
+            },
+            y: {
+              formatter: (value) => `${value}%`,
+            },
+          },
+          responsive: [
+            {
+              breakpoint: 568,
+              options: {
+                chart: {
+                  height: 300,
+                },
+                xaxis: {
+                  labels: {
+                    style: {
+                      fontSize: "11px",
+                    },
+                  },
+                },
+                yaxis: {
+                  labels: {
+                    style: {
+                      fontSize: "11px",
+                    },
+                  },
+                },
+              },
+            },
+          ],
+        };
+
+        // Create the chart
+        const chart = new ApexCharts(
+          document.querySelector(
+            "#hs-multiple-area-charts-compare-two-tooltip"
+          ),
+          chartOptions
+        );
+        chart.render();
+      });
+    </script>
+
+    <!--Department Count doughnut Chart script-->
+    <script>
+      window.addEventListener("load", () => {
+        // Apex Doughnut Chart for Department Employee Count
+        const doughnutChartOptions = {
+          chart: {
+            height: 300,
+            width: 300,
+            type: "donut",
+            toolbar: {
+              show: false,
+            },
+            zoom: {
+              enabled: false,
+            },
+          },
+          plotOptions: {
+            pie: {
+              donut: {
+                size: "70%",
+                labels: {
+                  show: true,
+                  name: {
+                    show: true,
+                    fontSize: "16px",
+                    fontWeight: 600,
+                    color: "#374151",
+                    offsetY: -15,
+                  },
+                  value: {
+                    show: true,
+                    fontSize: "28px",
+                    fontWeight: 700,
+                    color: "#1f2937",
+                    offsetY: 15,
+                    formatter: function (val) {
+                      return val;
+                    },
+                  },
+                  total: {
+                    show: true,
+                    showAlways: false,
+                    label: "Total Employees",
+                    fontSize: "16px",
+                    fontWeight: 600,
+                    color: "#6b7280",
+                    formatter: function (w) {
+                      return w.globals.seriesTotals.reduce((a, b) => {
+                        return a + b;
+                      }, 0);
+                    },
+                  },
+                },
+              },
+            },
+          },
+          series: [45, 28, 18],
+          labels: ["IT Department", "HR Department", "Finance Department"],
+          legend: {
+            show: false,
+          },
+          dataLabels: {
+            enabled: false,
+
+            style: {
+              fontSize: "12px",
+              fontWeight: "600",
+              colors: ["#ffffff", "#ffffff", "#000000"],
+            },
+          },
+          stroke: {
+            width: 5,
+            colors: ["#ffffff"],
+          },
+          grid: {
+            padding: {
+              top: -12,
+              bottom: -11,
+              left: -12,
+              right: -12,
+            },
+          },
+          states: {
+            hover: {
+              filter: {
+                type: "none",
+              },
+            },
+          },
+          tooltip: {
+            enabled: true,
+            custom: function ({ series, seriesIndex, dataPointIndex, w }) {
+              const data = w.globals.series[seriesIndex];
+              const label = w.globals.labels[seriesIndex];
+              return `
+            <div class="bg-white p-3   shadow-sm">
+              <div class="font-semibold text-gray-900">${label}</div>
+              <div class="text-sm font-medium text-blue-600">Employees: ${data}</div>
+            </div>
+          `;
+            },
+          },
+          colors: ["#3b82f6", "#0CAFFF", "#e5e7eb"],
+        };
+
+        // Create the doughnut chart
+        const doughnutChart = new ApexCharts(
+          document.querySelector("#hs-doughnut-chart"),
+          doughnutChartOptions
+        );
+        doughnutChart.render();
+      });
+    </script>
+
+<!-- Total Hiring this Month Chart script -->
+<script>
+window.addEventListener("load", () => {
+  var options = {
+          series: [75],
+          chart: {
+          height: 400,
+          type: 'radialBar',
+          toolbar: {
+            show: false
+          }
+        },
+        plotOptions: {
+          radialBar: {
+            startAngle: -135,
+            endAngle: 225,
+             hollow: {
+              margin: 0,
+              size: '70%',
+              background: '#fff',
+              image: undefined,
+              imageOffsetX: 0,
+              imageOffsetY: 0,
+              position: 'front',
+              dropShadow: {
+                enabled: true,
+                top: 3,
+                left: 0,
+                blur: 4,
+                opacity: 0.5
+              }
+            },
+            track: {
+              background: '#fff',
+              strokeWidth: '67%',
+              margin: 0, // margin is in pixels
+              dropShadow: {
+                enabled: false,
+                top: -3,
+                left: 0,
+                blur: 4,
+                opacity: 0.7
+              }
+            },
+        
+            dataLabels: {
+              show: true,
+              name: {
+                offsetY: -10,
+                show: true,
+                color: '#888',
+                fontWeight: 'semibold',
+                fontSize: '12px'
+              },
+              value: {
+                formatter: function(val) {
+                  return parseInt(val);
+                },
+                color: '#111',
+                fontSize: '32px',
+                fontWeight: 'bold',
+                show: true,
+              }
+            }
+          }
+        },
+        fill: {
+          type: 'gradient',
+          gradient: {
+            shade: 'dark',
+            type: 'horizontal',
+            shadeIntensity: 0.5,
+            gradientToColors: ['#3a82f6'],
+            inverseColors: true,
+            opacityFrom: 1,
+            opacityTo: 1,
+            stops: [0, 100]
+          }
+        },
+        stroke: {
+          lineCap: 'round'
+        },
+        labels: ['Total Hiring this Month'],
+        };
+
+        var chart = new ApexCharts(document.querySelector("#chart"), options);
+        chart.render();
+      
+});
+</script>
+
+
+  </body>
+</html>
